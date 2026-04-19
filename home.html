@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'"
+        />
+        <title>AI Token Cost Calculator (Free & Instant)</title>
+        <meta
+            name="description"
+            content="Calculate AI token costs instantly. Compare GPT models and estimate API pricing in seconds. Free, fast, and accurate."
+        />
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- SEO Header -->
+            <h1>AI Token Cost Calculator</h1>
+            <p>
+                Instantly calculate AI API costs using token pricing. Compare
+                models, estimate usage, and understand how much your prompts
+                cost in real time.
+            </p>
+
+            <!-- Calculator -->
+            <div class="card">
+                <div class="grid">
+                    <div>
+                        <label>Input Tokens</label>
+                        <input type="number" id="inputTokens" value="1000" />
+                    </div>
+
+                    <div>
+                        <label>Output Tokens</label>
+                        <input type="number" id="outputTokens" value="1000" />
+                    </div>
+                </div>
+
+                <label class="field-label" for="model">Select Model</label>
+                <select id="model">
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                </select>
+
+                <div class="result" id="result">$0.000000</div>
+
+                <p id="insight"></p>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="card">
+                <h2>Model Comparison</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison"></tbody>
+                </table>
+            </div>
+
+            <!-- FAQ for SEO -->
+            <div class="faq">
+                <h2>FAQ</h2>
+
+                <h3>What is a token?</h3>
+                <p>
+                    A token is a unit of text used by AI models. It can be a
+                    word, part of a word, or even punctuation.
+                </p>
+
+                <h3>How much does AI cost per token?</h3>
+                <p>
+                    Costs vary by model. Some models charge per million tokens
+                    for both input and output.
+                </p>
+
+                <h3>How can I reduce token costs?</h3>
+                <p>
+                    Use smaller models, shorten prompts, and limit output
+                    length.
+                </p>
+            </div>
+        </div>
+
+        <script src="./app.js"></script>
+    </body>
+</html>
