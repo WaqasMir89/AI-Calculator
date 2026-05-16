@@ -5,87 +5,452 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
             http-equiv="Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'"
+            content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'"
         />
-        <title>AI Token Cost Calculator (Free & Instant)</title>
+        <title>The Token Ledger — AI API Cost Calculator (2026 Pricing)</title>
         <meta
             name="description"
-            content="Calculate AI token costs instantly. Compare GPT models and estimate API pricing in seconds. Free, fast, and accurate."
+            content="A precise calculator for AI API costs. Compare Claude, GPT, Gemini and Grok pricing across input, output, cached, and batched workloads. Updated for 2026."
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
         />
         <link rel="stylesheet" href="./styles.css" />
     </head>
     <body>
-        <div class="container">
-            <!-- SEO Header -->
-            <h1>AI Token Cost Calculator</h1>
-            <p>
-                Instantly calculate AI API costs using token pricing. Compare
-                models, estimate usage, and understand how much your prompts
-                cost in real time.
-            </p>
+        <div class="grain" aria-hidden="true"></div>
 
-            <!-- Calculator -->
-            <div class="card">
-                <div class="grid">
-                    <div>
-                        <label>Input Tokens</label>
-                        <input type="number" id="inputTokens" value="1000" />
+        <header class="masthead">
+            <div class="masthead-inner">
+                <div class="dateline">
+                    <span id="todayDate">—</span>
+                    <span class="sep">·</span>
+                    <span>Vol. 1 · No. 1</span>
+                    <span class="sep">·</span>
+                    <span>Prices in USD per million tokens</span>
+                </div>
+                <div class="brand">
+                    <span class="brand-mark">¶</span>
+                    <span class="brand-name">The Token Ledger</span>
+                </div>
+                <div class="tagline">
+                    A precise accounting of what your prompts cost.
+                </div>
+            </div>
+            <div class="rule double"></div>
+        </header>
+
+        <main class="container">
+            <!-- HERO -->
+            <section class="hero">
+                <div class="hero-eyebrow">Calculator · Edition 2026</div>
+                <h1 class="hero-title">
+                    What does a <em>prompt</em> actually&nbsp;cost?
+                </h1>
+                <p class="hero-lede">
+                    Type your token counts, pick a model, and watch the
+                    arithmetic unfold. Compare every current frontier model
+                    side-by-side, scale to production volumes, and see where
+                    caching and batching bend the curve.
+                </p>
+            </section>
+
+            <div class="rule"></div>
+
+            <!-- CALCULATOR -->
+            <section class="calculator" aria-label="Cost calculator">
+                <div class="calc-grid">
+                    <!-- LEFT: Inputs -->
+                    <div class="inputs">
+                        <div class="section-label">
+                            <span class="section-num">01</span>
+                            <span>Inputs</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="inputTokens">Input tokens</label>
+                            <div class="input-wrap">
+                                <input
+                                    type="number"
+                                    id="inputTokens"
+                                    value="1000"
+                                    min="0"
+                                    inputmode="numeric"
+                                />
+                                <div class="input-meta" id="inputMeta">
+                                    ≈ 750 words
+                                </div>
+                            </div>
+                            <div class="quick-set" data-target="inputTokens">
+                                <button type="button" data-val="500">
+                                    500
+                                </button>
+                                <button type="button" data-val="1000">
+                                    1K
+                                </button>
+                                <button type="button" data-val="10000">
+                                    10K
+                                </button>
+                                <button type="button" data-val="100000">
+                                    100K
+                                </button>
+                                <button type="button" data-val="1000000">
+                                    1M
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="outputTokens">Output tokens</label>
+                            <div class="input-wrap">
+                                <input
+                                    type="number"
+                                    id="outputTokens"
+                                    value="1000"
+                                    min="0"
+                                    inputmode="numeric"
+                                />
+                                <div class="input-meta" id="outputMeta">
+                                    ≈ 750 words
+                                </div>
+                            </div>
+                            <div class="quick-set" data-target="outputTokens">
+                                <button type="button" data-val="500">
+                                    500
+                                </button>
+                                <button type="button" data-val="1000">
+                                    1K
+                                </button>
+                                <button type="button" data-val="10000">
+                                    10K
+                                </button>
+                                <button type="button" data-val="100000">
+                                    100K
+                                </button>
+                            </div>
+                        </div>
+
+                        <details class="estimator">
+                            <summary>
+                                <span>Estimate tokens from text</span>
+                                <span class="chev">＋</span>
+                            </summary>
+                            <textarea
+                                id="estimateText"
+                                placeholder="Paste a prompt here. We'll roughly estimate tokens at ~4 characters per token."
+                                rows="4"
+                            ></textarea>
+                            <div class="estimate-actions">
+                                <span id="estimateOut" class="estimate-out">
+                                    0 tokens
+                                </span>
+                                <button
+                                    type="button"
+                                    id="useAsInput"
+                                    class="btn-mini"
+                                >
+                                    Use as input →
+                                </button>
+                                <button
+                                    type="button"
+                                    id="useAsOutput"
+                                    class="btn-mini"
+                                >
+                                    Use as output →
+                                </button>
+                            </div>
+                        </details>
+
+                        <div class="section-label">
+                            <span class="section-num">02</span>
+                            <span>Modifiers</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="model">Model</label>
+                            <select id="model"></select>
+                        </div>
+
+                        <div class="field toggle-row">
+                            <div class="toggle">
+                                <input type="checkbox" id="useCache" />
+                                <label for="useCache">
+                                    <span class="toggle-title">
+                                        Prompt caching
+                                    </span>
+                                    <span class="toggle-sub">
+                                        Cached input billed at 10% (90% off)
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="cache-slider" id="cacheSlider">
+                                <label for="cacheRatio">
+                                    Cached portion of input:
+                                    <strong id="cacheRatioVal">50%</strong>
+                                </label>
+                                <input
+                                    type="range"
+                                    id="cacheRatio"
+                                    min="0"
+                                    max="100"
+                                    value="50"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="field toggle-row">
+                            <div class="toggle">
+                                <input type="checkbox" id="useBatch" />
+                                <label for="useBatch">
+                                    <span class="toggle-title">
+                                        Batch API
+                                    </span>
+                                    <span class="toggle-sub">
+                                        50% off, results within 24h
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="section-label">
+                            <span class="section-num">03</span>
+                            <span>Volume &amp; currency</span>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="requests">
+                                    Requests per day
+                                </label>
+                                <input
+                                    type="number"
+                                    id="requests"
+                                    value="1"
+                                    min="0"
+                                />
+                            </div>
+                            <div class="field">
+                                <label for="currency">Currency</label>
+                                <select id="currency">
+                                    <option value="USD">USD · $</option>
+                                    <option value="EUR">EUR · €</option>
+                                    <option value="GBP">GBP · £</option>
+                                    <option value="INR">INR · ₹</option>
+                                    <option value="PKR">PKR · ₨</option>
+                                    <option value="JPY">JPY · ¥</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- RIGHT: Output -->
+                    <div class="results">
+                        <div class="result-card primary">
+                            <div class="card-eyebrow">Cost per request</div>
+                            <div class="result-amount" id="result">
+                                $0.000000
+                            </div>
+                            <div class="result-breakdown" id="breakdown">
+                                <span>—</span>
+                            </div>
+                            <div class="insight" id="insight"></div>
+                        </div>
+
+                        <div class="volume-grid">
+                            <div class="volume-card">
+                                <div class="vol-label">Per day</div>
+                                <div class="vol-value" id="perDay">—</div>
+                                <div class="vol-meta" id="perDayMeta">
+                                    1 request
+                                </div>
+                            </div>
+                            <div class="volume-card">
+                                <div class="vol-label">Per month</div>
+                                <div class="vol-value" id="perMonth">—</div>
+                                <div class="vol-meta">×30 days</div>
+                            </div>
+                            <div class="volume-card">
+                                <div class="vol-label">Per year</div>
+                                <div class="vol-value" id="perYear">—</div>
+                                <div class="vol-meta">×365 days</div>
+                            </div>
+                        </div>
+
+                        <div class="rate-strip">
+                            <div>
+                                <span class="rs-label">Cost / 1K tokens</span>
+                                <span class="rs-value" id="per1K">—</span>
+                            </div>
+                            <div>
+                                <span class="rs-label">Cost / 1M tokens</span>
+                                <span class="rs-value" id="per1M">—</span>
+                            </div>
+                            <div>
+                                <span class="rs-label">In / Out split</span>
+                                <span class="rs-value" id="splitPct">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="rule double"></div>
+
+            <!-- COMPARISON -->
+            <section class="comparison-section">
+                <div class="section-head">
                     <div>
-                        <label>Output Tokens</label>
-                        <input type="number" id="outputTokens" value="1000" />
+                        <div class="section-eyebrow">Section II</div>
+                        <h2>The Field at a Glance</h2>
+                    </div>
+                    <div class="sort-controls">
+                        <span>Sort by</span>
+                        <button
+                            type="button"
+                            class="sort-btn active"
+                            data-sort="cost"
+                        >
+                            Cost ↑
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-btn"
+                            data-sort="provider"
+                        >
+                            Provider
+                        </button>
+                        <button
+                            type="button"
+                            class="sort-btn"
+                            data-sort="tier"
+                        >
+                            Tier
+                        </button>
                     </div>
                 </div>
 
-                <label class="field-label" for="model">Select Model</label>
-                <select id="model">
-                    <option value="gpt-4o">GPT-4o</option>
-                    <option value="gpt-4o-mini">GPT-4o Mini</option>
-                </select>
+                <div class="table-wrap">
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th class="col-model">Model</th>
+                                <th class="col-provider">Provider</th>
+                                <th class="col-rate">In&nbsp;/&nbsp;Out per&nbsp;1M</th>
+                                <th class="col-cost">Your cost</th>
+                                <th class="col-bar">Relative</th>
+                                <th class="col-delta">vs. selected</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparison"></tbody>
+                    </table>
+                </div>
 
-                <div class="result" id="result">$0.000000</div>
-
-                <p id="insight"></p>
-            </div>
-
-            <!-- Comparison Table -->
-            <div class="card">
-                <h2>Model Comparison</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Model</th>
-                            <th>Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody id="comparison"></tbody>
-                </table>
-            </div>
-
-            <!-- FAQ for SEO -->
-            <div class="faq">
-                <h2>FAQ</h2>
-
-                <h3>What is a token?</h3>
-                <p>
-                    A token is a unit of text used by AI models. It can be a
-                    word, part of a word, or even punctuation.
+                <p class="table-footnote">
+                    Cheapest result highlighted. Bar widths scale to the
+                    most expensive option on screen. Modifiers (caching,
+                    batch) apply to every row.
                 </p>
+            </section>
 
-                <h3>How much does AI cost per token?</h3>
-                <p>
-                    Costs vary by model. Some models charge per million tokens
-                    for both input and output.
-                </p>
+            <div class="rule double"></div>
 
-                <h3>How can I reduce token costs?</h3>
-                <p>
-                    Use smaller models, shorten prompts, and limit output
-                    length.
-                </p>
+            <!-- FAQ -->
+            <section class="faq">
+                <div class="section-head">
+                    <div>
+                        <div class="section-eyebrow">Section III</div>
+                        <h2>Marginalia</h2>
+                    </div>
+                </div>
+
+                <div class="faq-grid">
+                    <article class="faq-item">
+                        <h3>What exactly is a token?</h3>
+                        <p>
+                            A token is the atomic unit a model reads or
+                            writes — usually a short run of characters, often
+                            a whole short word, sometimes a fragment. As a
+                            rough ratio, four English characters or about
+                            three-quarters of a word equals one token.
+                        </p>
+                    </article>
+
+                    <article class="faq-item">
+                        <h3>Why are output tokens so much pricier?</h3>
+                        <p>
+                            Generating text is the expensive part. Reading
+                            your prompt is largely parallel work; producing
+                            each output token requires another forward pass
+                            through the model. Most providers price output
+                            three to five times higher than input.
+                        </p>
+                    </article>
+
+                    <article class="faq-item">
+                        <h3>What does prompt caching actually do?</h3>
+                        <p>
+                            If your requests share a long system prompt or
+                            document, providers can cache those tokens so
+                            repeated requests only pay a tiny fraction of the
+                            usual input rate — typically a 90% discount on
+                            the cached portion. The single biggest lever for
+                            agent-style workloads.
+                        </p>
+                    </article>
+
+                    <article class="faq-item">
+                        <h3>When should I use the Batch API?</h3>
+                        <p>
+                            Anything that doesn't need to answer a human
+                            within seconds — evaluations, bulk data
+                            processing, overnight content pipelines. Batch
+                            jobs return within 24 hours at half price on both
+                            input and output tokens, every model.
+                        </p>
+                    </article>
+
+                    <article class="faq-item">
+                        <h3>How do I cut costs in production?</h3>
+                        <p>
+                            Route by difficulty. Send classification and
+                            extraction to the smallest model, give the
+                            mid-tier the bulk of your traffic, and reserve
+                            the flagship for the requests where reasoning
+                            quality genuinely matters. A blended bill is
+                            almost always cheaper than a uniform one.
+                        </p>
+                    </article>
+
+                    <article class="faq-item">
+                        <h3>Are these prices current?</h3>
+                        <p>
+                            Rates are sourced from each provider's published
+                            pricing as of May 2026. Currency conversions are
+                            approximate. Confirm against your provider's
+                            current rate card before forecasting any
+                            material budget.
+                        </p>
+                    </article>
+                </div>
+            </section>
+        </main>
+
+        <footer class="colophon">
+            <div class="rule double"></div>
+            <div class="colophon-inner">
+                <div>
+                    <span class="brand-mark">¶</span>
+                    <span>The Token Ledger</span>
+                </div>
+                <div class="colophon-meta">
+                    Set in Fraunces &amp; JetBrains Mono · Prices verified
+                    May 2026 · No data leaves your browser
+                </div>
             </div>
-        </div>
+        </footer>
 
         <script src="./app.js"></script>
     </body>
